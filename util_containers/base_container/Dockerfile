@@ -2,8 +2,8 @@ FROM amazonlinux:2 as installer
 
 ENV SET_CONTAINER_TIMEZONE true
 ENV CONTAINER_TIMEZONE America/New_York
-ENV HOSTNAME amzlinux2
 ENV EDITOR "/usr/bin/nano"
+ENV HOSTNAME util_base
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
     && yum install -y unzip \

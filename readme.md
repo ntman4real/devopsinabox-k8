@@ -1,29 +1,44 @@
-## Process and Script to auto create or delete workspaces.
-
-#### To Create
-
-#### Requirements:
+### A 100% completly local K8's implementation.
+#### Requirements(Locally):
+- git
 - Docker
 - Kind
 - Lens 
-
-What this creates
-- a Utility Container, containing:
+#### What this repo creates:
+- a local Utility Container, containing:
     - Terraform
+    - xxx
+    - xxx
 - A kind k8's cluster with your specified amount of Master's and Worker's
-- Some k8's Base Application's
-    - krew
-    - promethesis
-    - Metrics
-    - Custom Metrics Adapter
+    - an SSL cert, based on chosen domain name
+    - A private docker registry
+    - Some k8's Base Application's
+        - krew
+        - promethesis
+        - Metrics
+        - Custom Metrics Adapter for several WebApp types(Nginx, GO, and more to come)
+- A Simple Dashboard page which displays your app main index.html as well as a cluster visialization of your clusters(courtsey of K8BITS)
 
-Optional:
-weaveworks
+#### To Create:
+- Just clone/fork this repo and run command `` sh  ./start.sh``
 
-sslCert
+##### or to script in one line 
+``
+curl https://raw.githubusercontent.com/ntman4real/devopsinabox-k8/master/start.sh | bash -s
+``
+##### to bypass creating the config file, or use existing, after cloning repo run command
+``
+sh ./start.sh | bash -s
+``
+
+
+#### To Delete
+```
+tfi
+```
+<br>
 
 #TODO
-- requirements
 - question script(start.sh)
 - instructions
 - local hosts file
@@ -44,18 +59,7 @@ sslCert
 - add todo
 - merge to master
 - make repo public
+- integrate, optionally, weaveworks
+- A clean delete process
 
 
-
-#### To Delete
-```
-tfi
-```
-<br>
-
-#### Or to script in one line 
-
-#####To Create:
-``
-curl https://raw.githubusercontent.com/ntman4real/devopsinabox-k8/master/start.sh | bash -s -- corp app1
-``

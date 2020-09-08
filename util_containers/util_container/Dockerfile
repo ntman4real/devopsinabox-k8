@@ -1,11 +1,11 @@
-FROM reg.gitlab.chewysb.com/devops/docker/base
+FROM util_base
 
 ENV SET_CONTAINER_TIMEZONE true
 ENV ENV="/etc/profile"
 ENV PATH="/usr/local/terraform:${PATH}"
+ENV HOSTNAME util_main
 
-RUN yum update -y \
-	&& yum install -y \
+RUN yum install -y \
 	zip \
 	autoconf \
 	automake \
@@ -54,10 +54,7 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s 
     && echo 'export KUBECONFIG="/root/.kube/config"' >> /etc/profile \
     && echo 'alias k="kubectl --kubeconfig /root/.kube/config"' >> /etc/profile \
     && echo 'alias kall="c && k get all -o wide --all-namespaces"' >> /etc/profile \
-    && echo 'alias kp="c && k get pods -o wide --all-namespaces"' >> /etc/profile \
-    && echo 'alias klb="c && k logs -n kube-system $(kubectl get po -n kube-system | egrep -o alb-ingress[a-zA-Z0-9-]+)"' >> /etc/profile \
-    && echo 'alias kns="c && k logs -n kube-system $(kubectl get po -n kube-system | egrep -o external[a-zA-Z0-9-]+)"' >> /etc/profile \
-    && echo 'alias gettoken="aws eks get-token --cluster-name glrunner-cluster | jq -r '.status.token'"' >> /etc/profile
+    && echo 'alias kp="c && k get pods -o wide --all-namespaces"' >> /etc/profile
 CMD /bin/bash -l
 
 #Add aws-iam-authenticator
@@ -111,7 +108,7 @@ RUN k9ver=$(curl -s https://api.github.com/repos/derailed/k9s/releases/latest | 
     && mv k9s /usr/local/bin/k9s \
     && rm -rf k9s_Linux_x86_64.tar.gz
 
-#Add KREW
+#Add KREW & KONFIG
 RUN set -x; cd "$(mktemp -d)" \
     && curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew.{tar.gz,yaml}" \
     && tar zxvf krew.tar.gz \
@@ -119,7 +116,11 @@ RUN set -x; cd "$(mktemp -d)" \
     && "$KREW" install --manifest=krew.yaml --archive=krew.tar.gz \
     && "$KREW" update \
     && export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" \
-    && export PATH="${PATH}:${HOME}/.krew/bin"
+    && export PATH="${PATH}:${HOME}/.krew/bin" \
+    && rm -rf krew.tar.gz \
+    && cp $(find /root/.krew/store/krew/v* -name krew) /usr/local/bin/ \
+    && krew install konfig \
+    && cp $(find /root/.krew/store/konfig/v* -name konfig-krew) /usr/local/bin/konfig
 
 #Add copilot
 RUN curl -Lo /usr/local/bin/copilot https://github.com/aws/copilot-cli/releases/download/v0.3.0/copilot-linux-v0.3.0 && chmod +x /usr/local/bin/copilot

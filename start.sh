@@ -1,99 +1,69 @@
 #!/usr/local/bin/bash
-#set -x
-####################################################################################
+
 ##### Check if Local Requirements are met #####
 
-curl https://raw.githubusercontent.com/ntman4real/devopsinabox-k8/master/reqs.sh | bash -s -- corp app1
+sh ./reqs.sh | bash -s
 
-https://github.com/ntman4real/devopsinabox-k8/blob/dev/start.sh
 
-echo "#########################" && echo
-svc=docker
-echo "check for running ${svc}"
-if pgrep -xq -- ${svc}; then
-    echo ${svc} is running
-    echo && echo "#########################" && echo
+##### Create config file or use existing #####
+
+if [ -f ./vars.ini ]; then
+  source ./vars.ini
 else
-    echo ${svc} not running, please run or install.
-    exit 1
+  echo "No config file exists, exiting now..."
+  exit 1
 fi
 
-svc=Lens
-echo "check for running ${svc}"
-if pgrep -xq -- ${svc}; then
-    echo ${svc} is running
-    echo && echo "#########################" && echo
+##### Build UTIL Containers #####
+sh ./util_containers/build.sh
+
+##### Build KIND YAML file #####
+clusterfile="./${clustername}${clustervar}.yaml"
+cat >${clusterfile} <<EOF
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: ${clustername}${clustervar}
+networking:
+  apiServerAddress: "${LOCAL_IP_ADDY}"
+  apiServerPort: 50${clustervar}
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+    - containerPort: 80
+      hostPort: 80
+      protocol: TCP
+    - containerPort: 443
+      hostPort: 443
+      protocol: TCP
+EOF
+
+if [ $mastersvar -ge 2 ]; then
+  for master in $(seq 2 $mastersvar); do echo "- role: control-plane" >>${clusterfile}; done
 else
-    echo ${svc} not running, please run or install.
-    exit 1
+  echo "Only 1 Master"
 fi
+for worker in $(seq 1 $workersvar); do echo "- role: worker" >>${clusterfile}; done
 
-svc=kind
-if kind version; then
-    echo ${svc} is installed
-    echo && echo "#########################" && echo
-else
-    echo ${svc} not running, please run or install.
-    exit 1
-fi
-####################################################################################
-touch ./remotestate.tf
+##### Update Remote State file #####
+sed -i '' -e "s|domainvar|${domainvar}|g" ./remotestate.tf
+sed -i '' -e "s|emailaddy|${emailaddy}|g" ./remotestate.tf
+sed -i '' -e "s|clustername|${clustername}|g" ./remotestate.tf
+sed -i '' -e "s|clustervar|${clustervar}|g" ./remotestate.tf
+sed -i '' -e "s|thisenv|${thisenv}|g" ./remotestate.tf
+sed -i '' -e "s|LOCAL_IP_ADDY|${LOCAL_IP_ADDY}|g" ./remotestate.tf
+sed -i '' -e "s|thiscluster_fqdn|${thiscluster_fqdn}|g" ./remotestate.tf
+sed -i '' -e "s|mastersvar|${mastersvar}|g" ./remotestate.tf
+sed -i '' -e "s|workersvar|${workersvar}|g" ./remotestate.tf
+terraform fmt ./remotestate.tf
 
-while [[ -z "${domainvar}" ]]
-do
-  read -e -p "Enter a DomainName: " domainvar
-done
-sed -i '' "s|domainvar|'${domainvar}'|" ./remotestate.tf
-echo && echo "#########################" && echo
-
-while [[ -z "${clustervar}" ]]
-do
-  read -e -p "Enter a ClusterVer: " clustervar
-done
-sed -i '' "s|clustervar|'${clustervar}'|" ./remotestate.tf
-echo && echo "#########################" && echo
-
-while [[ -z "${countvar}" ]]
-do
-  read -e -p "Enter a ClusterVer: " clustervar
-done
-sed -i '' "s|clustervar|'${clustervar}'|" ./remotestate.tf
-echo && echo "#########################" && echo
-
-
-
-
-echo 'Server# (00-99):'
-select countvar in [00-99]
-do
-  read countvar
-done
-echo && echo "#########################" && echo
-
-echo
-#read -p 'ClusterName: (default: kind)' clustername
-echo && echo "#########################" && echo
-
-echo
-#read -p 'Environment: (default: dev)' envvar
-echo && echo "#########################" && echo
-
-echo "Purpose:"
-read   purpose
-echo && echo "#########################" && echo
-
-echo
-#read -p '# of Masters: (default: 1)' masters
-echo && echo "#########################" && echo
-
-echo
-#read -p '# of Workers: (default: 1)' workers
-echo && echo "#########################" && echo
-
-echo ${purpose}.${domainvar}
-#https://github.com/ntman4real/devopsinabox-k8/blob/dev/start.sh
-echo && echo "#########################" && echo
-
-####################################################################################
-docker build -t util_base ./util_containers/base_container/.
-docker build -t util_main ./util_containers/util_container/.
+##### START KIND CLuster Build #####
+kconfig="./conf/kubeconfig"
+kind create cluster --config=${clusterfile} &
+wait
+kind get kubeconfig |tee -a ${kconfig}

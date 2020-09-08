@@ -6,12 +6,7 @@ resource "kubernetes_service_account" "prometheus_kube_state_metrics" {
 
     labels = {
       "app.kubernetes.io/instance" = "prometheus"
-
-      "app.kubernetes.io/managed-by" = "Helm"
-
       "app.kubernetes.io/name" = "kube-state-metrics"
-
-      "helm.sh/chart" = "kube-state-metrics-2.7.2"
     }
   }
 }
@@ -23,14 +18,7 @@ resource "kubernetes_service_account" "prometheus_alertmanager" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "alertmanager"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 }
@@ -42,14 +30,7 @@ resource "kubernetes_service_account" "prometheus_node_exporter" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "node-exporter"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 }
@@ -61,14 +42,7 @@ resource "kubernetes_service_account" "prometheus_pushgateway" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "pushgateway"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 }
@@ -80,14 +54,7 @@ resource "kubernetes_service_account" "prometheus_server" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "server"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 }
@@ -99,14 +66,7 @@ resource "kubernetes_config_map" "prometheus_alertmanager" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "alertmanager"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -122,26 +82,15 @@ resource "kubernetes_config_map" "prometheus_server" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "server"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
   data = {
     "alerting_rules.yml" = "{}\n"
-
     alerts = "{}\n"
-
     "prometheus.yml" = file("${path.module}/configs/prometheus-config.yaml")
-
     "recording_rules.yml" = "{}\n"
-
     rules = "{}\n"
   }
 }
@@ -154,14 +103,7 @@ resource "kubernetes_persistent_volume_claim" "prometheus_alertmanager" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "alertmanager"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -183,14 +125,7 @@ resource "kubernetes_persistent_volume_claim" "prometheus_server" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "server"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -212,12 +147,7 @@ resource "kubernetes_cluster_role" "prometheus_kube_state_metrics" {
 
     labels = {
       "app.kubernetes.io/instance" = "prometheus"
-
-      "app.kubernetes.io/managed-by" = "Helm"
-
       "app.kubernetes.io/name" = "kube-state-metrics"
-
-      "helm.sh/chart" = "kube-state-metrics-2.7.2"
     }
   }
 
@@ -360,62 +290,13 @@ resource "kubernetes_cluster_role" "prometheus_kube_state_metrics" {
   }
 }
 
-//resource "kubernetes_cluster_role" "prometheus_alertmanager" {
-//  metadata {
-//    name = "prometheus-alertmanager"
-//
-//    labels = {
-//      app = "prometheus"
-//
-//      chart = "prometheus-11.3.0"
-//
-//      component = "alertmanager"
-//
-//      heritage = "Helm"
-//
-//      release = "prometheus"
-//    }
-//  }
-//  rule {
-//    verbs = []
-//  }
-//}
-//
-//resource "kubernetes_cluster_role" "prometheus_pushgateway" {
-//  metadata {
-//    name = "prometheus-pushgateway"
-//
-//    labels = {
-//      app = "prometheus"
-//
-//      chart = "prometheus-11.3.0"
-//
-//      component = "pushgateway"
-//
-//      heritage = "Helm"
-//
-//      release = "prometheus"
-//    }
-//  }
-//  rule {
-//    verbs = []
-//  }
-//}
-
 resource "kubernetes_cluster_role" "prometheus_server" {
   metadata {
     name = "prometheus"
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "server"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -443,12 +324,7 @@ resource "kubernetes_cluster_role_binding" "prometheus_kube_state_metrics" {
 
     labels = {
       "app.kubernetes.io/instance" = "prometheus"
-
-      "app.kubernetes.io/managed-by" = "Helm"
-
       "app.kubernetes.io/name" = "kube-state-metrics"
-
-      "helm.sh/chart" = "kube-state-metrics-2.7.2"
     }
   }
 
@@ -471,14 +347,7 @@ resource "kubernetes_cluster_role_binding" "prometheus_alertmanager" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "alertmanager"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -501,14 +370,7 @@ resource "kubernetes_cluster_role_binding" "prometheus_pushgateway" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "pushgateway"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -531,14 +393,7 @@ resource "kubernetes_cluster_role_binding" "prometheus_server" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "server"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -563,12 +418,7 @@ resource "kubernetes_service" "prometheus_kube_state_metrics" {
 
     labels = {
       "app.kubernetes.io/instance" = "prometheus"
-
-      "app.kubernetes.io/managed-by" = "Helm"
-
       "app.kubernetes.io/name" = "kube-state-metrics"
-
-      "helm.sh/chart" = "kube-state-metrics-2.7.2"
     }
 
     annotations = {
@@ -586,7 +436,6 @@ resource "kubernetes_service" "prometheus_kube_state_metrics" {
 
     selector = {
       "app.kubernetes.io/instance" = "prometheus"
-
       "app.kubernetes.io/name" = "kube-state-metrics"
     }
 
@@ -601,14 +450,7 @@ resource "kubernetes_service" "prometheus_alertmanager" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "alertmanager"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -622,10 +464,7 @@ resource "kubernetes_service" "prometheus_alertmanager" {
 
     selector = {
       app = "prometheus"
-
       component = "alertmanager"
-
-      release = "prometheus"
     }
 
     type             = "ClusterIP"
@@ -640,14 +479,7 @@ resource "kubernetes_service" "prometheus_node_exporter" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "node-exporter"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
 
     annotations = {
@@ -665,10 +497,7 @@ resource "kubernetes_service" "prometheus_node_exporter" {
 
     selector = {
       app = "prometheus"
-
       component = "node-exporter"
-
-      release = "prometheus"
     }
 
     cluster_ip = "None"
@@ -683,14 +512,7 @@ resource "kubernetes_service" "prometheus_pushgateway" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "pushgateway"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
 
     annotations = {
@@ -725,14 +547,7 @@ resource "kubernetes_service" "prometheus_server" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "server"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -746,10 +561,7 @@ resource "kubernetes_service" "prometheus_server" {
 
     selector = {
       app = "prometheus"
-
       component = "server"
-
-      release = "prometheus"
     }
 
     type             = "ClusterIP"
@@ -765,14 +577,7 @@ resource "kubernetes_daemonset" "prometheus_node_exporter" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "node-exporter"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -780,10 +585,7 @@ resource "kubernetes_daemonset" "prometheus_node_exporter" {
     selector {
       match_labels = {
         app = "prometheus"
-
         component = "node-exporter"
-
-        release = "prometheus"
       }
     }
 
@@ -791,14 +593,7 @@ resource "kubernetes_daemonset" "prometheus_node_exporter" {
       metadata {
         labels = {
           app = "prometheus"
-
-          chart = "prometheus-11.3.0"
-
           component = "node-exporter"
-
-          heritage = "Helm"
-
-          release = "prometheus"
         }
       }
 
@@ -866,12 +661,7 @@ resource "kubernetes_deployment" "prometheus_kube_state_metrics" {
 
     labels = {
       "app.kubernetes.io/instance" = "prometheus"
-
-      "app.kubernetes.io/managed-by" = "Helm"
-
       "app.kubernetes.io/name" = "kube-state-metrics"
-
-      "helm.sh/chart" = "kube-state-metrics-2.7.2"
     }
   }
 
@@ -888,7 +678,6 @@ resource "kubernetes_deployment" "prometheus_kube_state_metrics" {
       metadata {
         labels = {
           "app.kubernetes.io/instance" = "prometheus"
-
           "app.kubernetes.io/name" = "kube-state-metrics"
         }
       }
@@ -948,14 +737,7 @@ resource "kubernetes_deployment" "prometheus_alertmanager" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "alertmanager"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -965,10 +747,6 @@ resource "kubernetes_deployment" "prometheus_alertmanager" {
     selector {
       match_labels = {
         app = "prometheus"
-
-        component = "alertmanager"
-
-        release = "prometheus"
       }
     }
 
@@ -976,14 +754,7 @@ resource "kubernetes_deployment" "prometheus_alertmanager" {
       metadata {
         labels = {
           app = "prometheus"
-
-          chart = "prometheus-11.3.0"
-
           component = "alertmanager"
-
-          heritage = "Helm"
-
-          release = "prometheus"
         }
       }
 
@@ -1084,14 +855,7 @@ resource "kubernetes_deployment" "prometheus_pushgateway" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "pushgateway"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -1101,10 +865,7 @@ resource "kubernetes_deployment" "prometheus_pushgateway" {
     selector {
       match_labels = {
         app = "prometheus"
-
         component = "pushgateway"
-
-        release = "prometheus"
       }
     }
 
@@ -1112,14 +873,7 @@ resource "kubernetes_deployment" "prometheus_pushgateway" {
       metadata {
         labels = {
           app = "prometheus"
-
-          chart = "prometheus-11.3.0"
-
           component = "pushgateway"
-
-          heritage = "Helm"
-
-          release = "prometheus"
         }
       }
 
@@ -1175,14 +929,7 @@ resource "kubernetes_deployment" "prometheus_server" {
 
     labels = {
       app = "prometheus"
-
-      chart = "prometheus-11.3.0"
-
       component = "server"
-
-      heritage = "Helm"
-
-      release = "prometheus"
     }
   }
 
@@ -1195,10 +942,7 @@ resource "kubernetes_deployment" "prometheus_server" {
     selector {
       match_labels = {
         app = "prometheus"
-
         component = "server"
-
-        release = "prometheus"
       }
     }
 
@@ -1206,14 +950,7 @@ resource "kubernetes_deployment" "prometheus_server" {
       metadata {
         labels = {
           app = "prometheus"
-
-          chart = "prometheus-11.3.0"
-
           component = "server"
-
-          heritage = "Helm"
-
-          release = "prometheus"
         }
       }
 
@@ -1313,6 +1050,4 @@ resource "kubernetes_deployment" "prometheus_server" {
     update = "3m"
   }
   depends_on = [kubernetes_service_account.prometheus_server]
-
 }
-
