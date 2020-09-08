@@ -12,7 +12,7 @@ else
     exit 1
 fi
 
-svc=git2
+svc=git
 echo "check for ${svc} installed"
 if ${svc} version; then
     echo ${svc} is installed
