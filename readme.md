@@ -2,11 +2,10 @@
 
 #### To Create
 
-Requirements:
-
-Docker
-Kind
-Lens
+#### Requirements:
+- Docker
+- Kind
+- Lens 
 
 What this creates
 - a Utility Container, containing:
@@ -23,40 +22,34 @@ weaveworks
 
 sslCert
 
-Modifies local hosts
+#TODO
+- requirements
+- question script(start.sh)
+- instructions
+- local hosts file
+- local registry
+- dockerfile
+- remote state
+- k8bit cleanup
+- Base
+- Admin
+- APP
+- cleanup nginx image
+- run/test
+- test lens/k8bit
+- cleanup all comments
+- cleanup readme
+- cleanup script
+- check credits
+- add todo
+- merge to master
+- make repo public
 
-Domain Name
-DNS
-```
-tfi
-tf workspace list
-tf workspace new dev_east
-tf workspace new dev_west
-tf workspace new qat_east
-tf workspace new qat_west
-tf workspace new stg_east
-tf workspace new stg_west
-tf workspace new prd_east
-tf workspace new prd_west
-tf workspace list
-export TF_WORKSPACE=dev_east
-tfi
-tfp
-```
+
 
 #### To Delete
 ```
 tfi
-tf workspace list
-tf workspace delete dev_east
-tf workspace delete dev_west
-tf workspace delete qat_east
-tf workspace delete qat_west
-tf workspace delete stg_east
-tf workspace delete stg_west
-tf workspace delete prd_east
-tf workspace delete prd_west
-tf workspace list
 ```
 <br>
 
@@ -64,9 +57,5 @@ tf workspace list
 
 #####To Create:
 ``
-curl https://gitlab.chewysb.com/snippets/2/raw?line_ending=raw | bash -s -- corp app1
-``
-#####To Delete:
-``
-curl https://gitlab.chewysb.com/snippets/2/raw?line_ending=raw | bash -s -- corp app1 delete
+curl https://raw.githubusercontent.com/ntman4real/devopsinabox-k8/master/start.sh | bash -s -- corp app1
 ``
