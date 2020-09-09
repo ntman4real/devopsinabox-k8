@@ -10,7 +10,7 @@ git clone -b dev git@github.com:ntman4real/devopsinabox-k8.git
 
 ##### Build UTIL Images #####
 cd devopsinabox-k8 || exit
-nohup sh ./util_containers/build.sh &
+nohup sh ./scripts/build_images.sh &
 
 ##### Create config file or use existing #####
 if [ -f ./vars.ini ]; then
