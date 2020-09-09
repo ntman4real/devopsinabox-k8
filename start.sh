@@ -2,8 +2,8 @@
 
 ####################################################################################
 ##### Check if Local Requirements are met #####
-#curl https://raw.githubusercontent.com/ntman4real/devopsinabox-k8/master/reqs.sh | bash -s
-curl https://raw.githubusercontent.com/ntman4real/devopsinabox-k8/dev/reqs.sh | bash -s
+#curl https://raw.githubusercontent.com/ntman4real/devopsinabox-k8/master/scripts/reqs.sh | bash -s
+curl https://raw.githubusercontent.com/ntman4real/devopsinabox-k8/dev/scripts/reqs.sh | bash -s
 
 #git clone git@github.com:ntman4real/devopsinabox-k8.git
 git clone -b dev git@github.com:ntman4real/devopsinabox-k8.git
