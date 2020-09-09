@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>00-CPanel</title>
+    <style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+<meta http-Equiv="Cache-Control" Content="no-cache">
+<meta http-Equiv="Pragma" Content="no-cache">
+<!--<meta http-Equiv="Expires" Content="0">-->
+<meta http-equiv="Expires" content="-1">
+
+<script type="text/javascript" >
+function checklength(i) {
+    'use strict';
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+let minutes, seconds, count, counter;
+count = 10; //seconds
+counter = setInterval(timer, 1000);
+
+function timer() {
+    'use strict';
+    count = count - 1;
+    minutes = checklength(Math.floor(count / 60));
+    seconds = checklength(count - minutes * 60);
+    if (count < 0) {
+        clearInterval(counter);
+        return;
+    }
+    document.getElementById("timer").innerHTML = 'This page will automatically refresh in ' + seconds + ' ' + 'seconds';
+    if (count === 0) {
+        location.reload(true);
+    }
+}
+</script>
+
+
+</head>
+<body>
+
+    <table border="3" width="100%" align="center">
+        <tr><th bgcolor="#7DFF33">NGINX Info & Stats</th></tr>
+    </table>
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
+<td><iframe src="https://app1.devcorpeks00east.chewysb.com/" width="100%" height="400" frameborder="0"></iframe></td>
+<td><iframe src="https://app1.devcorpeks00east.chewysb.com/status" width="100%" height="400" frameborder="0"></iframe></td>
+<td><iframe src="https://app1.devcorpeks00west.chewysb.com/" width="100%" height="400" frameborder="0"></iframe></td>
+<td><iframe src="https://app1.devcorpeks00west.chewysb.com/status" width="100%" height="400" frameborder="0"></iframe></td>
+
+    </table>
+    <table border="3" width="100%" align="center">
+        <tr><th bgcolor="#7DFF33">K8's Visualizer</th></tr>
+    </table>
+
+    <table border="0" cellpadding="10" cellspacing="0" width="100%" height="100%">
+<td><iframe src="http://localhost:8000/static/" width="100%" height="400" frameborder="0"></iframe></td>
+<td><iframe src="http://localhost:8001/static/" width="100%" height="400" frameborder="0"></iframe></td>
+    </table>
+
+    
+   <span id="timer"></span>
+   
+</body>
+</html>

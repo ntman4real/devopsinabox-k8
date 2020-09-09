@@ -61,5 +61,6 @@ tfi
 - make repo public
 - integrate, optionally, weaveworks
 - A clean delete process
+- Diagrams
 
 

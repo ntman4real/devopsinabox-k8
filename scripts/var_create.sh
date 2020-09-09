@@ -58,13 +58,19 @@ echo "thisenv=${thisenv}" |tee -a ./vars.ini
 echo && echo "#########################" && echo
 
 ##### Get Workstation IP #####
-LOCAL_IP_ADDY=$(ifconfig en0 | grep inet | grep -v inet6 | awk '{print $2}')
-echo "LOCAL_IP_ADDY=${LOCAL_IP_ADDY}" |tee -a ./vars.ini
+LOCAL_IP_ADDY=($(ifconfig en0 | grep inet | grep -v inet6 | awk '{print $2}'))
+select ip in "${LOCAL_IP_ADDY[@]}"; do
+    case $ip in
+        "") echo 'Invalid choice' >&2 ;;
+        *)  break
+    esac
+done
+printf 'You picked IP %s\n' "$ip"
+echo "LOCAL_IP_ADDY="$ip"" |tee -a ./vars.ini
 
-export cluster_fqdn=${thisenv}${clustername}${clustervar}.${domainvar}
+
+export cluster_fqdn=${thisenv}${clustername}${clusterver}.${domainvar}
 echo "thiscluster_fqdn=${cluster_fqdn}" |tee -a ./vars.ini
 echo "Your Clusters FQDN endpoint is ${cluster_fqdn}"
-echo "Your Clusters IP endpoint is 'https://${LOCAL_IP_ADDY}:50${clustervar}'"
+echo "Your Clusters IP endpoint is 'https://${LOCAL_IP_ADDY}:5000'"
 echo && echo "#########################" && echo
-
-#https://github.com/ntman4real/devopsinabox-k8/blob/dev/start.sh
